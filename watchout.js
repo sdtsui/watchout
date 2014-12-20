@@ -30,24 +30,24 @@ Enemy.prototype.move = function(){
   this.y = getRandomInt(0, gameBoardHeight - this.height);
 }
 Enemy.prototype.checkForCollisions = function(){
+  var img = d3.selectAll('image.enemy').data([this], function(d) {return d.id});
   var enemy = this;
-  var x1 = enemy.x;
-  var y1 = enemy.y;
-  var width = enemy.width;
+  var x1 = +img.attr('x').slice(0, -2);
+  var y1 = +img.attr('y').slice(0, -2);
+  var width = this.width;
   players.forEach(function(player){
     var x2 = player.x;
     var y2 = player.y;
     var distance = Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
-
     if (distance < (player.width + width) / 2) {
-      if (!enemy.collided) {
-        enemy.collided = true;
+      if (!this.collided) {
+        this.collided = true;
         handleCollision();
       }
     } else {
       enemy.collided = false;
     }
-  })
+  }, this)
 
 }
 var incrementScoreboard = function(){
@@ -136,16 +136,28 @@ var createPlayers = function(numPlayers) {
     .enter()
     .append('image')
     .attr(
-    {
-      "class" : "player",
-      "xlink:href": function(d){return d.imgURL;},
-      "x": function(d){return d.x+"px";},
-      "y": function(d){return d.y+"px";},
-      "height": function(d){return d.height},
-      "width":function(d){return d.width}
-    })
+      {
+        "class" : "player",
+        "xlink:href": function(d){return d.imgURL;},
+        "x": function(d){return d.x+"px";},
+        "y": function(d){return d.y+"px";},
+        "height": function(d){return d.height},
+        "width":function(d){return d.width}
+      })
     // .on('mousedown', dragLockPlayer);
-    .call(drag);
+    //.call(drag);
+  d3.select('svg').on('mousemove', function(){
+    var mousePosition = d3.mouse(this);
+    var player = players[0];
+    player.x = mousePosition[0] - player.width / 2;
+    player.y = mousePosition[1] - player.height / 2;
+    d3.selectAll('image.player')
+      .attr(
+        {
+          'x': function(d){return d.x},
+          'y': function(d){return d.y}
+        });
+  });
 };
 
 function getRandomInt(min, max) {
