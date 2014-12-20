@@ -89,7 +89,6 @@ var createPlayers = function(numPlayers) {
     var player = new Player(undefined, undefined, "Player.png");
     players.push(player);
   }
-  console.dir(players);
   // Add Players to the gameboard
   d3.select('svg').selectAll('image.player')
     .data(players, function(d) {return d.id;})
@@ -104,12 +103,38 @@ var createPlayers = function(numPlayers) {
       "height": function(d){return d.height},
       "width":function(d){return d.width}
     })
+    // .on('mousedown', dragLockPlayer);
     .call(drag);
 };
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+
+
+// var dragLockPlayer = function(e){
+//   console.log(e);
+//   d3.select('image.player').on('mousemove', movePlayer);
+
+
+// }
+
+// var movePlayer = function(player){
+//   // d3.select('image.player')
+//   console.dir(this);
+
+//   // var player = d3.select('image.player').???
+//   player.x = d3.mouse(this)[0] - player.width / 2;
+//   player.y = d3.mouse(this)[1] - player.height / 2;
+
+//   d3.select('image.player').attr(
+//   {
+//     "x": function(d){return d.x+"px";},
+//     "y": function(d){return d.y+"px";},
+//   })
+
+// }
 
 var drag = d3.behavior.drag()
   .on('drag', function(d) {
