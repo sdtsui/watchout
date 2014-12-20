@@ -105,23 +105,38 @@ var createEnemies = function (num, options){
     enemies.push(enemy);
   }
 
-  // Bind enemies to DOM elements and append them to the page
-  d3.select("svg").selectAll("image")
-    .data(enemies, function(d){return d.id;})
-    .enter()
+  var d3Enemies =
+    d3.select('svg').selectAll('image.enemy')
+      .data(enemies, function(d){return d.id;});
+
+  createD3Flotsam(d3Enemies, enemy);
+  updateLocations();
+
+
+};
+
+var createD3Flotsam = function(d3Elems, className) {
+  d3Elems.enter()
     .append("image")
     .attr(
       {
-        "class" : "enemy",
-        "xlink:href": function(d){return d.imgURL;},
-        "x": function(d){return d.x;},
-        "y": function(d){return d.y;},
+        'class': className,
+        'xlink:href': function(d){return d.imgURL;},
         "height": function(d){return d.height},
         "width":function(d){return d.width}
       });
+
 };
 
+var updateLocations = function() {
+  d3.select('svg').selectAll('image')
+    .attr(
+      {
+        "x": function(d){return d.x;},
+        "y": function(d){return d.y;},
+      });
 
+}
 
 /**
  * moveEnemiesToRandomLocation
