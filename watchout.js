@@ -28,7 +28,39 @@ Enemy.prototype.move = function(){
   this.x = getRandomInt(0, gameBoardWidth - this.width);
   this.y = getRandomInt(0, gameBoardHeight - this.height);
 }
+Enemy.prototype.checkForCollisions = function(){
+  var x1 = this.x;
+  var y1 = this.y;
+  var width = this.width;
+  players.forEach(function(player){
+    var x2 = player.x;
+    var y2 = player.y;
+    var distance = Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
 
+    if (distance < (player.width + width) / 2) {
+      handleCollision();
+    }
+  })
+
+}
+var incrementScoreboard = function(){
+  currentScore++;
+  updateScoreboard();
+}
+
+var updateScoreboard = function(){
+  d3.selectAll("div.high span").text(highScore);
+  d3.selectAll("div.current span").text(currentScore);
+
+};
+
+var handleCollision = function(){
+  if (currentScore > highScore){
+    highScore = currentScore;
+  }
+  currentScore = 0;
+  updateScoreboard();
+}
 
 var Player = function(x, y, imgURL){
   this.id = idCounter++;
