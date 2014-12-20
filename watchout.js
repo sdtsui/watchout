@@ -7,8 +7,8 @@ var Flotsam = function(){
 
 var Enemy = function(x,y, imgURL){
   this.id = idCounter++;
-  this.height = 50;
-  this.width = 50;
+  this.height = 125;
+  this.width = 100;
 
   if (x===undefined){
     x = getRandomInt(0, gameBoardWidth - this.width);
@@ -91,7 +91,7 @@ var Player = function(x, y, imgURL){
 
 var createEnemies = function (num){
   for (var i=0; i<num; i++){
-    var enemy = new Enemy( undefined, undefined ,"asteroid.png");
+    var enemy = new Enemy( undefined, undefined ,"FredFace.png");
     enemies.push(enemy);
   }
   d3.select("svg").selectAll("image")
@@ -102,8 +102,8 @@ var createEnemies = function (num){
       {
         "class" : "enemy",
         "xlink:href": function(d){return d.imgURL;},
-        "x": function(d){return d.x+"px";},
-        "y": function(d){return d.y+"px";},
+        "x": function(d){return d.x;},
+        "y": function(d){return d.y;},
         "height": function(d){return d.height},
         "width":function(d){return d.width}
       });

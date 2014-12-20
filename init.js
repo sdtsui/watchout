@@ -1,7 +1,7 @@
 var svg = document.getElementById("gameboard");
 gameBoardWidth = +svg.getAttribute("width");
 gameBoardHeight = +svg.getAttribute("height");
-var numEnemies = 10;
+var numEnemies = 15;
 var players = []; // stores all players
 var enemies = []; // stores all enemies
 var idCounter = 0; // This counter increments to create unique ids.

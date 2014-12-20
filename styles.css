@@ -14,14 +14,21 @@ div {
 svg {
   border: 1px solid red;
 }
-/*
+
 @-webkit-keyframes rotation{
   0% { -webkit-transform: rotate(0deg);}
-  50% { -webkit-transform: rotate(180deg);}
+  10% { -webkit-transform: rotate(180deg);}
+  20% { -webkit-transform: rotate(360deg);}
+  30% { -webkit-transform: rotate(0deg);}
+  40% { -webkit-transform: rotate(180deg);}
+  50% { -webkit-transform: rotate(360deg);}
+  60% { -webkit-transform: rotate(0deg);}
+  90% { -webkit-transform: rotate(180deg);}
   100% { -webkit-transform: rotate(360deg);}
 }
 
 .enemy{
-  -webkit-animation: rotation 5s linear infinite;
+  -webkit-transform-origin: center;
+  -webkit-animation: rotation 3s linear infinite;
 }
-*/
+
