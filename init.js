@@ -13,7 +13,7 @@ var collisions = 0;
 createPlayers(1);
 
 // Place enemies on board.
-createEnemies(numEnemies);
+createEnemies(numEnemies, {imgURL: 'FredFace.png'});
 
 // Create interval to move enemies to a random location every second.
 var gameTimer = setInterval(function(){

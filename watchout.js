@@ -31,7 +31,7 @@ Enemy.prototype.move = function(){
 }
 Enemy.prototype.checkForCollisions = function(){
   var img = d3.selectAll('image.enemy').data([this], function(d) {return d.id});
-  var enemy = this;
+  var enemy = this; // store this binding for later
   var x1 = +img.attr('x').slice(0, -2);
   var y1 = +img.attr('y').slice(0, -2);
   var width = this.width;
@@ -50,6 +50,8 @@ Enemy.prototype.checkForCollisions = function(){
   }, this)
 
 }
+
+
 var incrementScoreboard = function(){
   currentScore++;
   updateScoreboard();
@@ -89,15 +91,25 @@ var Player = function(x, y, imgURL){
 
 }
 
-var createEnemies = function (num){
+var createEnemies = function (num, options){
+  // Set parameters and extend with defaults for instantiation of Enemy
+  _.defaults(options, {
+    x: undefined,
+    y: undefined,
+    imgURL: 'asteroid.png'
+  })
+
+  // Add new enemies to global holder
   for (var i=0; i<num; i++){
-    var enemy = new Enemy( undefined, undefined ,"FredFace.png");
+    var enemy = new Enemy(options.x, options.y, options.imgURL);
     enemies.push(enemy);
   }
+
+  // Bind enemies to DOM elements and append them to the page
   d3.select("svg").selectAll("image")
     .data(enemies, function(d){return d.id;})
     .enter()
-    .append("image")//.attr("xlink:href", function(d){return d.imgURL;})
+    .append("image")
     .attr(
       {
         "class" : "enemy",
@@ -109,10 +121,22 @@ var createEnemies = function (num){
       });
 };
 
+
+
+/**
+ * moveEnemiesToRandomLocation
+ * ===========================
+ * Sets a new random location for all enemies inside of global enemies
+ * array. Then, initiates transition through d3 to move the DOM elements
+ * to reflect the new object's internal state.
+ */
 var moveEnemiesToRandomLocation = function (){
+  // Set new random location for each enemy object
   enemies.forEach(function(enemy){
     enemy.move();
   });
+
+  // Update DOM elements and create transition
   d3.selectAll("image.enemy").data(enemies, function(d){return d.id;})
     .transition()
     .duration(1000)
