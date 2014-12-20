@@ -20,6 +20,7 @@ var Enemy = function(x,y, imgURL){
   this.x = x;
   this.y = y;
   this.imgURL = imgURL;
+  this.collided = false;  // toggle to count only one collision per overlap
 }
 
 Enemy.prototype = Object.create(Flotsam.prototype);
@@ -29,16 +30,22 @@ Enemy.prototype.move = function(){
   this.y = getRandomInt(0, gameBoardHeight - this.height);
 }
 Enemy.prototype.checkForCollisions = function(){
-  var x1 = this.x;
-  var y1 = this.y;
-  var width = this.width;
+  var enemy = this;
+  var x1 = enemy.x;
+  var y1 = enemy.y;
+  var width = enemy.width;
   players.forEach(function(player){
     var x2 = player.x;
     var y2 = player.y;
     var distance = Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
 
     if (distance < (player.width + width) / 2) {
-      handleCollision();
+      if (!enemy.collided) {
+        enemy.collided = true;
+        handleCollision();
+      }
+    } else {
+      enemy.collided = false;
     }
   })
 
@@ -51,6 +58,7 @@ var incrementScoreboard = function(){
 var updateScoreboard = function(){
   d3.selectAll("div.high span").text(highScore);
   d3.selectAll("div.current span").text(currentScore);
+  d3.selectAll("div.collisions span").text(collisions);
 
 };
 
@@ -59,6 +67,7 @@ var handleCollision = function(){
     highScore = currentScore;
   }
   currentScore = 0;
+  collisions++;
   updateScoreboard();
 }
 
